@@ -1,12 +1,23 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Enable CORS and JSON parsing
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from the "public" directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Route to serve the homepage
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// BMI calculation API
 app.post('/calculate-bmi', (req, res) => {
   const { weight, height } = req.body;
 
@@ -30,6 +41,7 @@ app.post('/calculate-bmi', (req, res) => {
   });
 });
 
+// Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
